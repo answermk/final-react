@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../assets/styles/ForgotPassword.css';  // Custom styles for better design
+import '../assets/styles/ForgotPassword.css';  // Custom styles
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage('');
         setError('');
-
-        const resetLink = `http://localhost:3000/reset-password?token=123456`; // This token should be dynamic in real scenarios
+        setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:8083/api/password/forgot-password', {
-                email,
-                resetLink,
-            });
+            const response = await axios.post('http://localhost:8083/api/password/forgot-password', { email });
             setMessage(response.data);
         } catch (err) {
             setError(err.response?.data || 'Error sending reset email');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -42,7 +41,9 @@ const ForgotPasswordPage = () => {
                         required
                     />
                 </div>
-                <button type="submit" className="submit-button">Send Reset Link</button>
+                <button type="submit" className="submit-button" disabled={loading}>
+                    {loading ? 'Sending...' : 'Send Reset Link'}
+                </button>
             </form>
             {message && <p className="success-message">{message}</p>}
             {error && <p className="error-message">{error}</p>}

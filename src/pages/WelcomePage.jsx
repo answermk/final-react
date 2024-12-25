@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSpring, animated } from "react-spring"; // For animations
+import { messages } from './messages'; // Importing the messages
 
 const WelcomePage = () => {
     const [message, setMessage] = useState("");
@@ -15,6 +16,10 @@ const WelcomePage = () => {
         from: { opacity: 0 },
         config: { duration: 1000 },
     });
+
+    // Language-specific messages
+    const currentMessages = messages[language];
+
     const handleFullNameChange = (e) => {
         setFullName(e.target.value);
     };
@@ -28,7 +33,7 @@ const WelcomePage = () => {
 
         // Validate fullName
         if (!fullName.trim()) {
-            setStatusMessage("Please enter your full name");
+            setStatusMessage(currentMessages.messageFailed);
             setStatusColor("red");
             return;
         }
@@ -49,15 +54,15 @@ const WelcomePage = () => {
             if (response.ok) {
                 setMessage('');
                 setFullName(''); // Clear fullName after successful submission
-                setStatusMessage("Message sent successfully!");
+                setStatusMessage(currentMessages.messageSent);
                 setStatusColor("green");
             } else {
-                setStatusMessage("Failed to send message. Please try again.");
+                setStatusMessage(currentMessages.messageFailed);
                 setStatusColor("red");
             }
         } catch (error) {
             console.error('Error sending message:', error);
-            setStatusMessage("Error sending message. Please try again.");
+            setStatusMessage(currentMessages.messageError);
             setStatusColor("red");
         }
     };
@@ -65,7 +70,6 @@ const WelcomePage = () => {
     const handleLanguageChange = (e) => {
         setLanguage(e.target.value);
     };
-
 
     return (
         <div
@@ -105,14 +109,13 @@ const WelcomePage = () => {
             </div>
 
             <animated.h1 style={{ ...fadeIn, color: "#2c3e50", fontSize: "2.5rem", marginBottom: "0.8rem" }}>
-                Embark on a smarter journey with SmartRail
+                {currentMessages.welcome}
             </animated.h1>
 
             <animated.p style={{ ...fadeIn, fontSize: "1rem", marginBottom: "1rem" }}>
-                Your gateway to easy and fast train travel booking.
+                {currentMessages.mission}
             </animated.p>
 
-            {/* Vision and Mission in Columns */}
             <div
                 style={{
                     display: "flex",
@@ -124,52 +127,55 @@ const WelcomePage = () => {
                 }}
             >
                 {/* Vision Column */}
+                {/* Vision Column */}
                 <div style={{ width: "48%", textAlign: "left" }}>
                     <animated.h2 style={{ ...fadeIn, fontSize: "1.2rem", color: "#2c3e50" }}>Our Vision</animated.h2>
                     <animated.p style={{ ...fadeIn, fontSize: "0.9rem", color: "#333" }}>
-                        To revolutionize train travel with advanced technology, providing easy access,
-                        efficiency, and comfort to travelers everywhere.
+                        {currentMessages.vision}
                     </animated.p>
-
-                    {/* Register and Login Buttons under Vision */}
-                    <div style={{ marginTop: "1.5rem" }}>
-                        <Link
-                            to="/register"
-                            style={{
-                                padding: "0.6rem 1.2rem", // Reduced padding
-                                margin: "0 1rem",
-                                textDecoration: "none",
-                                fontWeight: "bold",
-                                color: "#fff",
-                                backgroundColor: "#8af4e4",
-                                borderRadius: "5px",
-                            }}
-                        >
-                            Register
-                        </Link>
+                    {/* Login and Register Buttons */}
+                    <div style={{ marginTop: "1rem" }}>
                         <Link
                             to="/login"
                             style={{
-                                padding: "0.6rem 1.2rem", // Reduced padding
-                                margin: "0 1rem",
+                                marginRight: "1rem",
+                                padding: "0.6rem 1.2rem",
                                 textDecoration: "none",
                                 fontWeight: "bold",
                                 color: "#fff",
-                                backgroundColor: "#205793",
+                                backgroundColor: "#131313",
                                 borderRadius: "5px",
+                                border: "none",
+                                cursor: "pointer",
                             }}
                         >
-                            Log In
+                            {currentMessages.loginButton}
+                        </Link>
+                        <Link
+                            to="/register"
+                            style={{
+                                padding: "0.6rem 1.2rem",
+                                textDecoration: "none",
+                                fontWeight: "bold",
+                                color: "#fff",
+                                backgroundColor: "#131313",
+                                borderRadius: "5px",
+                                border: "none",
+                                cursor: "pointer",
+                            }}
+                        >
+                            {currentMessages.register}
                         </Link>
                     </div>
                 </div>
+
+
 
                 {/* Mission Column */}
                 <div style={{ width: "48%", textAlign: "left" }}>
                     <animated.h2 style={{ ...fadeIn, fontSize: "1.2rem", color: "#2c3e50" }}>Our Mission</animated.h2>
                     <animated.p style={{ ...fadeIn, fontSize: "0.9rem", color: "#333" }}>
-                        To create an intuitive, seamless, and sustainable train travel experience by offering
-                        users the tools they need to plan, book, and manage their journeys effortlessly.
+                        {currentMessages.mission}
                     </animated.p>
                 </div>
             </div>
@@ -195,18 +201,19 @@ const WelcomePage = () => {
                         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                     }}
                 >
-                    <h2 style={{ color: "#2c3e50" }}>Contact Us</h2>
-                    <p>If you have any questions or need assistance, feel free to reach out to us!</p>
-                    <p>Email: info@smartrail.com</p>
-                    <p>Phone: +250 786 7890</p>
-                    <p>Address: KK563ST34, Kigali City, Rwanda</p>
+                    <h2 style={{ color: "#2c3e50" }}>{currentMessages.contact.title}</h2>
+                    <p>{currentMessages.contact.email}</p>
+                    <p>{currentMessages.contact.phone}</p>
+                    <p>{currentMessages.contact.address}</p>
                 </div>
+
                 {/* Feedback Message */}
                 {statusMessage && (
                     <p style={{ color: statusColor, fontWeight: "bold", fontSize: "1.1rem" }}>
                         {statusMessage}
                     </p>
                 )}
+
                 {/* Message Box */}
                 <div style={{
                     width: "45%",
@@ -215,14 +222,13 @@ const WelcomePage = () => {
                     borderRadius: "8px",
                     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                 }}>
-                    <h2 style={{color: "#2c3e50"}}>Send Us a Message</h2>
+                    <h2 style={{color: "#2c3e50"}}>{currentMessages.contact.title}</h2>
                     <form onSubmit={handleSubmit}>
-                        {/* Add Full Name input field */}
                         <input
                             type="text"
                             value={fullName}
                             onChange={handleFullNameChange}
-                            placeholder="Enter your full name..."
+                            placeholder={currentMessages.fullNamePlaceholder}
                             style={{
                                 width: "100%",
                                 padding: "0.6rem",
@@ -236,7 +242,7 @@ const WelcomePage = () => {
                         <textarea
                             value={message}
                             onChange={handleMessageChange}
-                            placeholder="Type your message here..."
+                            placeholder={currentMessages.messagePlaceholder}
                             rows="5"
                             style={{
                                 width: "100%",
@@ -248,6 +254,7 @@ const WelcomePage = () => {
                                 resize: "none",
                             }}
                         ></textarea>
+
                         <div>
                             <button
                                 type="submit"

@@ -22,9 +22,9 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
-            <Route path="/train-schedule" element={<TrainSchedule />} />
-            <Route path="/ticket-details" element={<TicketDetails />} />
-            <Route path="/ticket-booking" element={<TicketBooking />} />
+          <Route path="/train-schedule" element={<TrainSchedule />} />
+          <Route path="/ticket-details" element={<TicketDetails />} />
+          <Route path="/ticket-booking" element={<TicketBooking />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/user-dashboard" element={<UserDashboard />} />
           <Route path="/accountant-dashboard" element={<AccountantDashboard />} />

@@ -36,3 +36,40 @@
     transform: rotate(360deg);
   }
 }
+
+/* src/App.css */
+body {
+  font-family: Arial, sans-serif;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #4CAF50;
+}
+
+header {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+}
+
+nav a {
+  margin: 0 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.language-select {
+  margin-right: 10px;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+

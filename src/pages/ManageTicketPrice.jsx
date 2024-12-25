@@ -1,11 +1,20 @@
 // src/components/ManageTicketPrice.js
 import React, { useState } from 'react';
 import axios from '../utils/axios';
+import { messages } from './messages';  // Import your messages
+import { useLocale } from '../locales'; // Import your custom i18n hook
+//import { Button } from 'react-bootstrap';  // Assume you have a context for locale
 
 const ManageTicketPrice = () => {
     const [trainId, setTrainId] = useState('');
     const [trainClass, setTrainClass] = useState('');
     const [price, setPrice] = useState('');
+
+    // Assume useLocale returns the current language
+    const { locale } = useLocale();
+
+    // Get messages for the current locale
+    const t = messages[locale] || messages.en;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -15,19 +24,19 @@ const ManageTicketPrice = () => {
                 trainClass,
                 price
             });
-            alert('Ticket price updated successfully');
+            alert(t.successMessage);  // Use localized success message
         } catch (error) {
             console.error('Error updating ticket price', error);
-            alert('Failed to update ticket price');
+            alert(t.errorMessage);  // Use localized error message
         }
     };
 
     return (
         <div className="manage-ticket-price">
-            <h2>Manage Ticket Price</h2>
+            <h2>{t.manageTicketPrice}</h2>  {/* Use localized title */}
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Train ID:</label>
+                    <label>{t.trainId}</label>  {/* Use localized label */}
                     <input
                         type="number"
                         value={trainId}
@@ -36,7 +45,7 @@ const ManageTicketPrice = () => {
                     />
                 </div>
                 <div>
-                    <label>Train Class:</label>
+                    <label>{t.trainClass}</label>  {/* Use localized label */}
                     <input
                         type="text"
                         value={trainClass}
@@ -45,7 +54,7 @@ const ManageTicketPrice = () => {
                     />
                 </div>
                 <div>
-                    <label>Ticket Price:</label>
+                    <label>{t.ticketPrice}</label>  {/* Use localized label */}
                     <input
                         type="number"
                         value={price}
@@ -53,7 +62,7 @@ const ManageTicketPrice = () => {
                         required
                     />
                 </div>
-                <button type="submit">Update Price</button>
+                <button type="submit">{t.updatePrice}</button>  {/* Use localized button text */}
             </form>
         </div>
     );
